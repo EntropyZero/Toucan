@@ -1,15 +1,15 @@
 using Microsoft.AspNet.Authorization;
-using Microsoft.Data.Entity;
+using Toucan.Adapters;
 
 namespace Toucan.Services
 {
     public interface IServiceContext
     {
-        object DbContext { get; } 
+        IDbAdapter DbContext { get; } 
         IAuthorizationService AuthorizationService { get; }
     }
     
-    public class ServiceContext<T> : IServiceContext
+    public class ServiceContext<T> : IServiceContext  where T : IDbAdapter
     {
 
         public ServiceContext(T dbContext, IAuthorizationService authzService)
@@ -18,7 +18,7 @@ namespace Toucan.Services
             AuthorizationService = authzService;
         }
         
-        public object DbContext { get; private set;}
+        public IDbAdapter DbContext { get; private set;}
 
         public IAuthorizationService AuthorizationService { get; private set; }
     }

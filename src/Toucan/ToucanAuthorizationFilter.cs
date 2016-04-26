@@ -44,29 +44,27 @@ namespace Toucan
                     continue;
                 }
                 Type modelType = attribute.Type;
+                object model;
                 if(context.RouteData.Values.ContainsKey("id"))
-                {
-                    var prop = GetDBSetProperty(modelType, serviceContext.DbContext);
-                    var model = prop.FirstOrDefault(m =>
-                        (int)(Convert.ChangeType(m,modelType).GetType().GetProperty("Id").GetGetMethod().Invoke(m, new object[0])) == Int32.Parse(context.RouteData.Values["id"].ToString())
-                     );
-                    Task<bool> authTask = serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
-                    authTask.Wait();
-                    if(authTask.Result == true)
-                    {
-                       (context.Controller as IToucanController).Models.Add(modelType.Name, model);
-                    }
-                    else
-                    {
-                        context.Result = new ChallengeResult();
-                        return;
-                    }
+                {                                     
+                    model = serviceContext.DbContext.GetModel(context.RouteData.Values["id"], modelType);
                 }
                 else
                 {
-                    Console.WriteLine("Initializing new model entity");
-                    Activator.CreateInstance(modelType);             
-                }                    
+                    model = Activator.CreateInstance(modelType);             
+                }   
+
+                Task<bool> authTask = serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
+                authTask.Wait();
+                if(authTask.Result == true)
+                {
+                    (context.Controller as IToucanController).Models.Add(modelType.Name, model);
+                }
+                else
+                {
+                    context.Result = new ChallengeResult();
+                    return;
+                }               
             }   
         }
         

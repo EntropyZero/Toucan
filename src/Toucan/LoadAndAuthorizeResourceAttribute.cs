@@ -6,6 +6,10 @@ namespace Toucan {
     public class LoadAndAuthorizeResourceAttribute : Attribute
     {
         
+        public LoadAndAuthorizeResourceAttribute()
+        {
+        }
+        
         public LoadAndAuthorizeResourceAttribute(Type modelType) : this(modelType, null)
         {
         }
