@@ -44,10 +44,8 @@ namespace Toucan
                     continue;
                 }
                 Type modelType = attribute.Type;
-                Console.WriteLine("Type: {0}", modelType.Name);
                 if(context.RouteData.Values.ContainsKey("id"))
                 {
-                    Console.WriteLine("Loading model entity with ID: {0}", context.RouteData.Values["id"]);
                     var prop = GetDBSetProperty(modelType, serviceContext.DbContext);
                     var model = prop.FirstOrDefault(m =>
                         (int)(Convert.ChangeType(m,modelType).GetType().GetProperty("Id").GetGetMethod().Invoke(m, new object[0])) == Int32.Parse(context.RouteData.Values["id"].ToString())
