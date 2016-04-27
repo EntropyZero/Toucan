@@ -47,7 +47,7 @@ namespace Toucan
                 object model;
                 if(context.RouteData.Values.ContainsKey("id"))
                 {  
-                    var key =  context.RouteData.Values["id"];
+                    var key = context.RouteData.Values["id"];
                     object newkey;
                     if(serviceContext.DbContext.KeyType != key.GetType() && key is string)
                     {   
@@ -75,16 +75,6 @@ namespace Toucan
                     return;
                 }               
             }   
-        }
-        
-        private IEnumerable<object> GetDBSetProperty(Type modelType, object context)
-        {
-            var contextType = (context as DbContext).GetType();
-            var members = contextType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var genericMembers = members.Where( m => m.PropertyType.IsConstructedGenericType);
-            var property = genericMembers.FirstOrDefault(m => m.PropertyType.GenericTypeArguments.First().Name == modelType.Name);
-
-            return property.GetGetMethod().Invoke(context, new object[0]) as IEnumerable<object>;
         }
     }
 }
