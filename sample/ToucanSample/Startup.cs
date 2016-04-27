@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -12,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ToucanSample.Models;
 using ToucanSample.Services;
+using ToucanSample.Migrations;
+using Toucan;
+using Toucan.Adapters;
 
 namespace ToucanSample
 {
@@ -51,7 +50,16 @@ namespace ToucanSample
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>>(permissions => 
+                permissions.AddPermission().
+                    OnModel("Post").
+                    ForRole("Member").
+                    WithAction("Details").
+                    Where((user, model) => ((Post)model).Id == 1));
+            services.AddMvc(options =>
+            { 
+                options.Filters.Add(new ToucanAuthorizationFilter());
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -100,6 +108,11 @@ namespace ToucanSample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            
+            if (env.IsDevelopment())
+            {
+                SampleData.Seed(app.ApplicationServices);
+            }
         }
 
         // Entry point for the application.
