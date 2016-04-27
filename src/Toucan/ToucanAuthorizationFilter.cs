@@ -46,14 +46,23 @@ namespace Toucan
                 Type modelType = attribute.Type;
                 object model;
                 if(context.RouteData.Values.ContainsKey("id"))
-                {                                     
-                    model = serviceContext.DbContext.GetModel(context.RouteData.Values["id"], modelType);
+                {  
+                    var key =  context.RouteData.Values["id"];
+                    object newkey;
+                    if(serviceContext.DbContext.KeyType != key.GetType() && key is string)
+                    {   
+                        newkey = serviceContext.DbContext.KeyType.GetMethod("Parse", new[]{typeof(string)} ).Invoke(null, new []{key});
+                    } 
+                    else
+                    {
+                        newkey = key;
+                    }                              
+                    model = serviceContext.DbContext.GetModel(newkey, modelType);
                 }
                 else
                 {
                     model = Activator.CreateInstance(modelType);             
                 }   
-
                 Task<bool> authTask = serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
                 authTask.Wait();
                 if(authTask.Result == true)

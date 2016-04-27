@@ -13,7 +13,7 @@ namespace Toucan
         {
             PermissionStore store = new PermissionStore();
             services.AddInstance<PermissionStore>(store);
-            services.AddSingleton<IDbAdapter, T>();    
+            services.AddSingleton<T, T>();    
             services.AddSingleton<IServiceContext, ServiceContext<T>>();
             services.AddScoped<IAuthorizationHandler, ToucanAuthorizationHandler>();
             
