@@ -6,18 +6,21 @@ using Microsoft.Data.Entity;
 
 namespace Toucan.Adapters
 {
-    public class EntityFrameworkAdapter<StoreType, T> : DbAdapter<StoreType, T> where StoreType : DbContext
+    public class EntityFrameworkAdapter<TStoreType, TKey> : DbAdapter<TStoreType, TKey> where TStoreType : DbContext
     {
-        public EntityFrameworkAdapter(StoreType dataAccess)
+        public EntityFrameworkAdapter(TStoreType dataAccess)
         {
             DataAccess = dataAccess;   
         }
         
-        public override object GetModel<K>(K key, Type modelType)
+        public override object GetModel<TArg>(TArg key, Type modelType)
         {
             IEnumerable<object> dbSet = GetDBSetProperty(modelType);  
             var model = dbSet.FirstOrDefault(
-                m => Equals(((T)(Convert.ChangeType(m, modelType).GetType().GetProperty("Id").GetGetMethod().Invoke(m, new object[0]))), key));            
+                m => Equals(
+                        ((TArg)(Convert.ChangeType(m, modelType).GetType().GetProperty("Id").GetGetMethod().Invoke(m, new object[0]))), 
+                        key
+                        ));            
             return model;
         }
         
