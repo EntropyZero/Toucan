@@ -61,6 +61,10 @@ namespace Toucan
                 {
                     model = Activator.CreateInstance(modelType);             
                 }   
+                if(model == null)
+                {
+                    throw new InvalidOperationException(string.Format("Requested model of type {0} not found", modelType.FullName));
+                }
                 Task<bool> authTask = serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
                 authTask.Wait();
                 if(authTask.Result == true)

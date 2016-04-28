@@ -256,6 +256,41 @@ namespace Toucan.Tests
             
             Assert.IsType<ChallengeResult>(actionContext.Result);
        }
+       
+       [Fact]
+       public void ShouldThrowExceptionIfLookupModelIsNull()
+       {
+            var mockAuthorizationService = new Mock<IAuthorizationService>();
+            var mockDbContext = new Mock<IDbAdapter>();
+            var stubHttpContext = new StubHttpContext();
+            var mockController = new ToucanControllerWithAttributes();
+            var mockServiceContext =  new Mock<IServiceContext>();
+            var serviceProvider = new StubServiceProvider();
+            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            stubHttpContext.ApplicationServices = serviceProvider;
+            mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
+            mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
+            
+            Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
+            mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
+            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(null);
+            
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("id", "1");
+            routeData.Values.Add("action", "test");
+            
+            ActionContext test = new ActionContext(stubHttpContext, routeData, new ActionDescriptor());
+            ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
+
+            Assert.Throws<InvalidOperationException>(() => new ToucanAuthorizationFilter().OnActionExecuting(actionContext));
+            Assert.Equal(null, mockController.GetModelInstance<object>("Object"));
+            mockAuthorizationService.Verify
+                (m => m.AuthorizeAsync(
+                    It.IsAny<ClaimsPrincipal>(), 
+                    It.IsAny<object>(), 
+                    It.IsAny<IEnumerable<IAuthorizationRequirement>>()), 
+                Times.Never);
+       }
     }
 
     internal class StubServiceProvider : IServiceProvider
