@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization.Infrastructure;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Filters;
-using Microsoft.Data.Entity;
 using Microsoft.Extensions.DependencyInjection;
 using Toucan.Controllers;
 using Toucan.Services;
