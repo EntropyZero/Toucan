@@ -7,6 +7,8 @@
 # Ignore all logfiles and tempfiles.
 /**/bin
 /**/.DS_Store
+/**/*.db
+/**/project.lock.json
 
 
 

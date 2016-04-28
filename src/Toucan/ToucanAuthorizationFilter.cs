@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization.Infrastructure;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Filters;
-using Microsoft.Data.Entity;
 using Microsoft.Extensions.DependencyInjection;
 using Toucan.Controllers;
 using Toucan.Services;
@@ -44,40 +42,37 @@ namespace Toucan
                     continue;
                 }
                 Type modelType = attribute.Type;
+                object model;
                 if(context.RouteData.Values.ContainsKey("id"))
-                {
-                    var prop = GetDBSetProperty(modelType, serviceContext.DbContext);
-                    var model = prop.FirstOrDefault(m =>
-                        (int)(Convert.ChangeType(m,modelType).GetType().GetProperty("Id").GetGetMethod().Invoke(m, new object[0])) == Int32.Parse(context.RouteData.Values["id"].ToString())
-                     );
-                    Task<bool> authTask = serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
-                    authTask.Wait();
-                    if(authTask.Result == true)
-                    {
-                       (context.Controller as IToucanController).Models.Add(modelType.Name, model);
-                    }
+                {  
+                    var key = context.RouteData.Values["id"];
+                    object newkey;
+                    if(serviceContext.DbContext.KeyType != key.GetType() && key is string)
+                    {   
+                        newkey = serviceContext.DbContext.KeyType.GetMethod("Parse", new[]{typeof(string)} ).Invoke(null, new []{key});
+                    } 
                     else
                     {
-                        context.Result = new ChallengeResult();
-                        return;
-                    }
+                        newkey = key;
+                    }                              
+                    model = serviceContext.DbContext.GetModel(newkey, modelType);
                 }
                 else
                 {
-                    Console.WriteLine("Initializing new model entity");
-                    Activator.CreateInstance(modelType);             
-                }                    
+                    model = Activator.CreateInstance(modelType);             
+                }   
+                Task<bool> authTask = serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
+                authTask.Wait();
+                if(authTask.Result == true)
+                {
+                    (context.Controller as IToucanController).Models.Add(modelType.Name, model);
+                }
+                else
+                {
+                    context.Result = new ChallengeResult();
+                    return;
+                }               
             }   
-        }
-        
-        private IEnumerable<object> GetDBSetProperty(Type modelType, object context)
-        {
-            var contextType = (context as DbContext).GetType();
-            var members = contextType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var genericMembers = members.Where( m => m.PropertyType.IsConstructedGenericType);
-            var property = genericMembers.FirstOrDefault(m => m.PropertyType.GenericTypeArguments.First().Name == modelType.Name);
-
-            return property.GetGetMethod().Invoke(context, new object[0]) as IEnumerable<object>;
         }
     }
 }
