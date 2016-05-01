@@ -6,6 +6,6 @@ namespace Toucan.Controllers
     {
         Dictionary<string, object> Models { get; }  
         
-        T GetModelInstance<T>(string name) where T : class; 
+        TModel GetModelInstance<TModel>() where TModel : class; 
     }
 }

@@ -15,11 +15,12 @@ namespace Toucan.Controllers
             }
         }
 
-        public T GetModelInstance<T>(string name) where T : class
+        public TModel GetModelInstance<TModel>() where TModel : class
         {
+            string name = typeof(TModel).Name;
             if(_models.ContainsKey(name))
             {
-                return _models[name] as T;
+                return _models[name] as TModel;
             }
             
             return null;

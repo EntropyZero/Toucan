@@ -16,7 +16,7 @@ namespace ToucanSample.Controllers
         
         public IActionResult Details(int id)
         {
-            Post post = this.GetModelInstance<Post>("Post");
+            Post post = this.GetModelInstance<Post>();
             ViewData["Message"] = post.Title;
             return View();
         }
