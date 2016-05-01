@@ -4,9 +4,10 @@ language: CSharp
 mono:
   - latest
 install:
-  - sudo apt-get install unzip curl
+  - sudo apt-get -y install unzip curl
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
   - dnvm upgrade -r coreclr
+  - dnvm restore
 script:
-  - dnx /home/travis/build/EntropyZero/Toucan/test/project.json test -parallel none
+  - dnx Toucan/test/Toucan.Tests/project.json test -parallel none
  
