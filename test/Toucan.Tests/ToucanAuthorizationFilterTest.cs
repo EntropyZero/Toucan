@@ -187,7 +187,7 @@ namespace Toucan.Tests
             task.Start();
             new ToucanAuthorizationFilter().OnActionExecuting(actionContext);
            
-            Assert.Equal(model, mockController.GetModelInstance<object>("Object"));
+            Assert.Equal(model, mockController.GetModelInstance<object>());
        }
        
        [Fact] 
@@ -220,7 +220,7 @@ namespace Toucan.Tests
             task.Start();
             new ToucanAuthorizationFilter().OnActionExecuting(actionContext);
            
-            Assert.Equal(null, mockController.GetModelInstance<object>("Object"));
+            Assert.Equal(null, mockController.GetModelInstance<object>());
        }
        
               
@@ -283,7 +283,7 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
 
             Assert.Throws<InvalidOperationException>(() => new ToucanAuthorizationFilter().OnActionExecuting(actionContext));
-            Assert.Equal(null, mockController.GetModelInstance<object>("Object"));
+            Assert.Equal(null, mockController.GetModelInstance<object>());
             mockAuthorizationService.Verify
                 (m => m.AuthorizeAsync(
                     It.IsAny<ClaimsPrincipal>(), 
