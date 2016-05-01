@@ -7,4 +7,5 @@ install:
   - dnvm upgrade -r coreclr
   - dnu restore
 script:
-  - dnx /home/travis/build/philmcmillan/Toucan/test/project.json test -parallel none
+  - dnx /home/travis/build/EntropyZero/Toucan/test/project.json test -parallel none
+ 
