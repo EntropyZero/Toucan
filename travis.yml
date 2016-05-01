@@ -1,0 +1,10 @@
+language: CSharp
+mono:
+  - latest
+install:
+  - sudo apt-get install unzip curl
+  - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
+  - dnvm upgrade -r coreclr
+  - dnu restore
+script:
+  - dnx /home/travis/build/philmcmillan/Toucan/test/project.json test -parallel none
