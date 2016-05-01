@@ -7,7 +7,7 @@ install:
   - sudo apt-get -y install unzip curl
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
   - dnvm upgrade -r coreclr
-  - dnu restore
+  - dnu  --verbose restore
 script:
   - dnx Toucan/test/Toucan.Tests/project.json test -parallel none
  
