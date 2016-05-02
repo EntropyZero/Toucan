@@ -1,4 +1,5 @@
 ##Toucan
+[![Build Status](https://travis-ci.org/EntropyZero/Toucan.svg?branch=master)](https://travis-ci.org/EntropyZero/Toucan)
 Toucan is a .NET Core (DNX Core) library for ASP.NET 5 and MVC 6. Toucan was inspired by the Rails gems [CanCan](https://github.com/CanCanCommunity/cancancan) and [Canard](https://github.com/james2m/canard), and is intended to provide a resource authorization library for MVC applications that provides for declarative resource loading and authorization without requiring developers to load and authorize resources imperatively in controller actions. All resource permissions are defined in a single location and not duplicated across controllers, views, and database queries.
 
 ### Not stable
