@@ -1,10 +1,8 @@
-sudo: required
-dist: trusty
+os: osx
 language: CSharp
 mono:
   - latest
 install:
-  - sudo apt-get -y install unzip curl
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
   - dnvm upgrade -r coreclr
   - dnu  --verbose restore
