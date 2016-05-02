@@ -5,7 +5,7 @@ mono:
 install:
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
   - dnvm upgrade -r coreclr
-  - dnu  --verbose restore
+  - dnu  --verbose restore -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json
 script:
   - dnx Toucan/test/Toucan.Tests/project.json test -parallel none
  
