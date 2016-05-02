@@ -8,4 +8,4 @@ install:
   - dnu --verbose restore src/Toucan/project.json
   - dnu --verbose restore test/Toucan.Tests/project.json -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json
 script:
-  - dnx Toucan/test/Toucan.Tests/project.json test -parallel none
+  - dnx test/Toucan.Tests/project.json test -parallel none
