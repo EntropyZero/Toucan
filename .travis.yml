@@ -3,7 +3,7 @@ language: CSharp
 mono:
   - latest
 env:
-  - DNX_BUILD_VERSION=TRAVIS_BUILD_NUMBER
+  - DNX_BUILD_VERSION=${TRAVIS_BUILD_NUMBER}
 install:
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
   - dnvm upgrade -r coreclr
@@ -12,7 +12,7 @@ install:
 script:
   - echo DNX_BUILD_VERSION = ${DNX_BUILD_VERSION}
   - cd test/Toucan.Tests && dnx test -parallel none
-  - cd ../../src/Toucan && dnu pack --configuration Release -out ../../packages
+  - cd ../../src/Toucan && dnu pack --configuration Release --out ../../packages
 deploy:
   skip_cleanup: true
   provider: releases
