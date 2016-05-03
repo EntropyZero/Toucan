@@ -10,6 +10,7 @@ install:
   - dnu --verbose restore src/Toucan/project.json
   - dnu --verbose restore test/Toucan.Tests/project.json -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json
 script:
+  - echo TRAVIS_TAG = ${TRAVIS_TAG}
   - echo DNX_BUILD_VERSION = ${DNX_BUILD_VERSION}
   - cd test/Toucan.Tests && dnx test -parallel none
   - cd ../../src/Toucan && dnu pack --configuration Release --out ../../packages
