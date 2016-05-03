@@ -14,7 +14,7 @@ script:
   - echo TRAVIS_TAG = ${TRAVIS_TAG}
   - echo DNX_BUILD_VERSION = ${DNX_BUILD_VERSION}
   - cd test/Toucan.Tests && dnx test -parallel none
-  - cd ../../src/Toucan && dnu pack --configuration Release --out ../../packages
+  - cd ../../src/Toucan && dnu pack --configuration Release --out ../../packages && cd ../../
 deploy:
   before_deploy:
     - echo $(ls packages/Release)
