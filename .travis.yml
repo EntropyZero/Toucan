@@ -16,6 +16,8 @@ script:
   - cd test/Toucan.Tests && dnx test -parallel none
   - cd ../../src/Toucan && dnu pack --configuration Release --out ../../packages
 deploy:
+  before_deploy:
+    - echo $(ls pacahges/Release)
   skip_cleanup: true
   provider: releases
   api_key:
@@ -25,4 +27,3 @@ deploy:
     - packages/Release/Toucan.1.0.0-${DNX_BUILD_VERSION}.symbols.nupkg
   on:
     repo: EntropyZero/Toucan
-    tags: true
