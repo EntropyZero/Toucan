@@ -17,7 +17,7 @@ script:
   - cd ../../src/Toucan && dnu pack --configuration Release --out ../../packages
 deploy:
   before_deploy:
-    - echo $(ls pacahges/Release)
+    - echo $(ls packages/Release)
   skip_cleanup: true
   provider: releases
   api_key:
