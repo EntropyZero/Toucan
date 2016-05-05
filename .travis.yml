@@ -14,9 +14,9 @@ script:
   - if [ ! -z $TRAVIS_TAG ]; then DNX_BUILD_VERSION=$(echo $TRAVIS_TAG | cut -d '-' -f 2); fi
   - echo TRAVIS_TAG = ${TRAVIS_TAG}
   - echo DNX_BUILD_VERSION = ${DNX_BUILD_VERSION}
-  - dnvm use 1.0.0-rc1-updat2 -r coreclr
+  - dnvm use 1.0.0-rc1-update2 -r coreclr
   - dnx --configuration Release -p test/Toucan.Tests test -parallel none
-  - dnvm use 1.0.0-rc1-updat2 -r mono
+  - dnvm use 1.0.0-rc1-update2 -r mono
   - dnu pack src/Toucan --configuration Release --out packages 
 deploy:
   skip_cleanup: true
