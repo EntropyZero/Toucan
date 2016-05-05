@@ -1,10 +1,10 @@
 {
   "version": "1.0.0-*",
-  "description": "Toucan Class Library",
-  "authors": [ "Class Library template" ],
-  "tags": [""],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "description": "Toucan MVC Resource Authorization Library",
+  "authors": [ "Phil McMillan" ],
+  "tags": ["MVC", "Authorization", "Rails", "CanCan", "Canard", ""],
+  "projectUrl": "https://github.com/EntropyZero/Toucan",
+  "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE",
   "tooling": {
     "defaultNamespace": "Toucan"
   },
