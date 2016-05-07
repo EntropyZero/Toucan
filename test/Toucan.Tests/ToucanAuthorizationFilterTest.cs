@@ -59,7 +59,7 @@ namespace Toucan.Tests
             ActionContext test = new ActionContext(stubHttpContext, new RouteData(), new ActionDescriptor());           
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);  
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext));  
             
             mockServiceContext.Verify(m => m.DbContext, Times.Never);
             mockServiceContext.Verify(m => m.AuthorizationService, Times.Never);   
@@ -286,7 +286,8 @@ namespace Toucan.Tests
             ActionContext test = new ActionContext(stubHttpContext, routeData, new ActionDescriptor());
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
 
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext));
+            
             Assert.Equal(null, mockController.GetModelInstance<object>());
             mockAuthorizationService.Verify
                 (m => m.AuthorizeAsync(

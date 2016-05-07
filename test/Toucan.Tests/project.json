@@ -4,7 +4,7 @@
         "ef" : "EntityFramework.Commands"
     },
     "dependencies": {
-        "Toucan" : "1.0.0",
+        "Toucan" : "1.0.0-*",
         "xunit": "2.1.0",
         "xunit.runner.dnx": "2.1.0-rc1-build204",
         "moq.netcore": "4.4.0-beta8",
