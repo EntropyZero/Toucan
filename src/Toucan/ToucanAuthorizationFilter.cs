@@ -11,13 +11,9 @@ using Toucan.Services;
 
 namespace Toucan
 {
-    public class ToucanAuthorizationFilter : IActionFilter
+    public class ToucanAuthorizationFilter : IAsyncActionFilter
     {
-        public void OnActionExecuted(ActionExecutedContext context)
-        {         
-        }
-
-        public void OnActionExecuting(ActionExecutingContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             IServiceContext serviceContext = context.HttpContext.ApplicationServices.GetRequiredService<IServiceContext>();
             TypeInfo t = context.Controller.GetType().GetTypeInfo(); 
@@ -25,6 +21,7 @@ namespace Toucan
             
             if(!attributes.Any())
             {
+                    await next();
                     return;
             }
             if(!(context.Controller is IToucanController))
@@ -65,17 +62,16 @@ namespace Toucan
                 {
                     throw new InvalidOperationException(string.Format("Requested model of type {0} not found", modelType.FullName));
                 }
-                Task<bool> authTask = serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
-                authTask.Wait();
-                if(authTask.Result == true)
+                bool authResult = await serviceContext.AuthorizationService.AuthorizeAsync(context.HttpContext.User, model, new[]{new OperationAuthorizationRequirement{ Name = context.RouteData.Values["action"].ToString()}}); 
+                if(authResult == true)
                 {
                     (context.Controller as IToucanController).Models.Add(modelType.Name, model);
                 }
                 else
                 {
                     context.Result = new ChallengeResult();
-                    return;
-                }               
+                }
+                await next();
             }   
         }
     }
