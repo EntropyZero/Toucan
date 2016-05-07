@@ -71,8 +71,8 @@ namespace Toucan
                 {
                     context.Result = new ChallengeResult();
                 }
-                await next();
-            }   
+            }
+            await next();   
         }
     }
 }
