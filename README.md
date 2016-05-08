@@ -7,21 +7,21 @@ Toucan is a .NET Core (DNX Core) library targeting ASP.NET Core MVC applications
 
 Toucan distributed as a NuGet package. If using the package console:
 
-```
+```powershell
 Install-Package Toucan
 ```
 
 Or, you can register the dependency in your project.json file:
 
-```
-dependencies{
+```json
+"dependencies":{
 	"Toucan": "1.0.0-*"
 }
 ```
 
 and run
 
-```
+```bash
 dnu restore
 ```
 
@@ -39,7 +39,7 @@ The basic flow is:
 
 1. Create your model, views and add a controller inheriting from ToucanController.
 2. Add LoadAndAuthorize attributes to your controller to indicate which models to load. This is convention driven, and loads by the Id in the route.
-3. Implement a role permission scheme during configuration. The AddToucan extension method takes a lambda which may use to call an abilities class that has a method for configuring permissions. See the sample app for a minor sample.
+3. Implement a role permission scheme during configuration. The AddToucan extension method takes a lambda which may use to call an abilities class that has a method for configuring permissions. See the sample app for a minor example.
 
 A sample app is included in the sources that shows the basics of working with Toucan.
 
