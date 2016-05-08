@@ -70,7 +70,9 @@ namespace Toucan
                 else
                 {
                     context.Result = new ChallengeResult();
+                    break;
                 }
+                
             }
             await next();   
         }
