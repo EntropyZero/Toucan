@@ -1,39 +1,56 @@
 ##Toucan
-[![Build Status](https://travis-ci.org/EntropyZero/Toucan.svg?branch=master)](https://travis-ci.org/EntropyZero/Toucan)
+Travis: ![Build Status](https://travis-ci.org/EntropyZero/Toucan.svg?branch=master)(https://travis-ci.org/EntropyZero/Toucan)
 
-Toucan is a .NET Core (DNX Core) library for ASP.NET 5 and MVC 6. Toucan was inspired by the Rails gems [CanCan](https://github.com/CanCanCommunity/cancancan) and [Canard](https://github.com/james2m/canard), and is intended to provide a resource authorization library for MVC applications that provides for declarative resource loading and authorization without requiring developers to load and authorize resources imperatively in controller actions. All resource permissions are defined in a single location and not duplicated across controllers, views, and database queries.
+Toucan is a .NET Core (DNX Core) library targeting ASP.NET Core MVC applications. Toucan was inspired by the Rails gems [CanCan](https://github.com/CanCanCommunity/cancancan) and [Canard](https://github.com/james2m/canard), and is intended to be a resource authorization library for MVC applications that provides for declarative resource loading and authorization without requiring developers to load and authorize resources imperatively in controller actions. All resource permissions are defined in a single location and not duplicated across controllers, views, and database queries.
 
-### Not stable
-The branching strategy is in flux as this is a new project and my development effort is driving toward an initial releasable NuGet package for consumption against the RC1 DNX Core 5 runtimes. 
+### Installation
 
-As work settles down the vision is that Master will be stable with the tagged milestone releases, while the Dev branch will be the unstable mainline for forward development.
+Toucan distributed as a NuGet package. If using the package console:
+
+```
+Install-Package Toucan
+```
+
+Or, you can register the dependency in your project.json file:
+
+```
+dependencies{
+	"Toucan": "1.0.0-*"
+}
+```
+
+and run
+
+```
+dnu restore
+```
 
 ### Getting Started
 
-Until there is a build system producing NuGet packages as an artifact, the best way to get started is to pull a copy of the repo, and use the DNX tools to create a local NuGet Package that may be referenced by your project.
+After you have a referenced Toucan in your project, it is as simple as following 3 guidelines:
 
-For more information on the DNX CLI tools, see the Working with DNX Projects documentation at <https://docs.asp.net/en/latest/dnx/projects.html>
+1. Controllers that will make use of Toucan must implement IToucanController. An abstract base ToucanController is also provided if you would prefer. This provides a property collection and generic model getter method for accessing loaded models.
 
-After you have a referenced dependency, it is as simple as following 3 steps:
+2. Use the LoadAndAuthorizeAttribute to specify which models to load and authorize by model type and action name.
 
-1. Controllers that will make use of Toucan must implement IToucanController. An abstract base ToucanController is also provided if you would prefer.
+3. Add Toucan services and configuration during ServicesConfiguration. Configuration currently is a work in progress and the Fluent API, while functional, is clunky and repetitive.
 
-2. Use LoadAndAuthorizeAttribute to specify which models to load and authorize by model type and action name.
+The basic flow is:
 
-3. Add Toucan services and configuration during ServicesConfiguration.
+1. Create your model, views and add a controller inheriting from ToucanController.
+2. Add LoadAndAuthorize attributes to your controller to indicate which models to load. This is convention driven, and loads by the Id in the route.
+3. Implement a role permission scheme during configuration. The AddToucan extension method takes a lambda which may use to call an abilities class that has a method for configuring permissions. See the sample app for a minor sample.
 
 A sample app is included in the sources that shows the basics of working with Toucan.
 
 ### Roadmap
 
-Right now there are 5 major items that needs to be addressed as I drive the project to its first release:
+Right now there are 3 major items that needs to be addressed as I drive the project to its 1.0 release:
 
-* Working CI for the project with appropriate artifacts
 * A much improved permissions configuration story
   * Improve the Fluent API, or
   * Provide for some form of DSL/file spec for loading permission definitions
-* Support for more than the DNX Core 5 runtime
-* Handling for nested routes with multiple resources
+* Handling for nested controller routes with multiple resources for loading
 * Improved documentation and samples
 
 ### Contributing
