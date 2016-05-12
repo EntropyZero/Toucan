@@ -105,6 +105,9 @@ namespace ToucanSample
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "PostComments",
+                    template: "Posts/{post_id}/{controller}/{action=Index}/{id?}");
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
