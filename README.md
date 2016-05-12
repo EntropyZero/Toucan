@@ -42,6 +42,8 @@ The basic flow is:
 
 A sample app is included in the sources that shows the basics of working with Toucan.
 
+Toucan now supports nested resource loading and authorization. See the [wiki](https://github.com/EntropyZero/Toucan/wiki/Nested-Resources) for details.
+
 ## Roadmap
 
 Right now there are 3 major items that needs to be addressed as I drive the project to its 1.0 release:
@@ -49,7 +51,6 @@ Right now there are 3 major items that needs to be addressed as I drive the proj
 * A much improved permissions configuration story
   * Improve the Fluent API, or
   * Provide for some form of DSL/file spec for loading permission definitions
-* Handling for nested controller routes with multiple resources for loading
 * Improved documentation and samples
 
 ### Contributing
