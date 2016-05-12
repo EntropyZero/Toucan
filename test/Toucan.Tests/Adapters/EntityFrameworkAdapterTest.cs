@@ -5,12 +5,12 @@ using Toucan.Adapters;
 
 namespace Toucan.Tests.Adapters
 {
-    public class EntityFrameworkAdapterTests : IDisposable
+    public class EntityFrameworkAdapterTest : IDisposable
     {
         private TestDbContext _testDbContext;
         private TestModel _testModel;
         
-        public EntityFrameworkAdapterTests()
+        public EntityFrameworkAdapterTest()
         {
             var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
             optionsBuilder.UseInMemoryDatabase();

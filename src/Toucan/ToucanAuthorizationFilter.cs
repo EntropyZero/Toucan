@@ -7,6 +7,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Toucan.Controllers;
+using Toucan.Collections;
 using Toucan.Services;
 
 namespace Toucan
@@ -40,19 +41,10 @@ namespace Toucan
                 }
                 Type modelType = attribute.Type;
                 object model;
-                if(context.RouteData.Values.ContainsKey("id"))
-                {  
-                    var key = context.RouteData.Values["id"];
-                    object newkey;
-                    if(serviceContext.DbContext.KeyType != key.GetType() && key is string)
-                    {   
-                        newkey = serviceContext.DbContext.KeyType.GetMethod("Parse", new[]{typeof(string)} ).Invoke(null, new []{key});
-                    } 
-                    else
-                    {
-                        newkey = key;
-                    }                              
-                    model = serviceContext.DbContext.GetModel(newkey, modelType);
+                var key = context.RouteData.Values.FindModelKey(modelType, serviceContext.DbContext.KeyType);
+                if(key != null)
+                {                          
+                    model = serviceContext.DbContext.GetModel(key, modelType);
                 }
                 else
                 {
@@ -74,7 +66,10 @@ namespace Toucan
                 }
                 
             }
-            await next();   
+            if(context.Result == null)
+            {
+                await next();
+            }
         }
     }
 }
