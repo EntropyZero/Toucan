@@ -2,26 +2,27 @@
   "version": "1.0.0-*",
   "description": "Toucan MVC Resource Authorization Library",
   "authors": [ "Phil McMillan" ],
-  "tags": ["MVC", "Authorization", "Rails", "CanCan", "Canard", ""],
-  "projectUrl": "https://github.com/EntropyZero/Toucan",
-  "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE",
   "tooling": {
     "defaultNamespace": "Toucan"
   },
 
   "dependencies": {
-    "EntityFramework.Commands": "7.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Session": "1.0.0-rc1-final"
+    "Microsoft.AspNetCore.Mvc": "1.0.0-*",
+    "Microsoft.EntityFrameworkCore.Commands": "1.0.0-*"
   },
   
   "frameworks": {
-    "dnx451": {},
-    "dnxcore50": {
-      "dependencies": {
-        "System.Net.Security": "4.0.0-beta-23516",
-        "System.Collections.Specialized": "4.0.1-beta-23409"
-      }
+    "netcoreapp1.0": {
+      "imports": [
+        "portable-net45+wp80+win8+wpa81+dnxcore50",
+        "portable-net451+win8"
+      ]
     }
+  },
+  
+  "packOptions": {
+    "tags": ["MVC", "Authorization", "Rails", "CanCan", "Canard", ""],
+    "projectUrl": "https://github.com/EntropyZero/Toucan",
+    "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE"
   }
 }
