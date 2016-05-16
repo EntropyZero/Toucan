@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Moq;
 using Toucan.Infrastructure;
 using Toucan.Services;

@@ -4,15 +4,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Authorization.Infrastructure;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Authentication;
-using Microsoft.AspNet.Http.Features;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Abstractions;
-using Microsoft.AspNet.Mvc.Filters;
-using Microsoft.AspNet.Routing;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Toucan.Adapters;
 using Toucan.Controllers;
@@ -35,7 +35,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;                      
+            stubHttpContext.RequestServices = serviceProvider;                      
             
             ActionContext test = new ActionContext(stubHttpContext, new RouteData(), new ActionDescriptor());           
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
@@ -54,7 +54,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;                      
+            stubHttpContext.RequestServices = serviceProvider;                      
             
             ActionContext test = new ActionContext(stubHttpContext, new RouteData(), new ActionDescriptor());           
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
@@ -75,7 +75,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
@@ -108,7 +108,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
@@ -141,7 +141,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
@@ -171,7 +171,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             stubHttpContext.User = mockUser.Object;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
@@ -204,7 +204,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
@@ -237,7 +237,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
@@ -271,7 +271,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
@@ -304,7 +304,7 @@ namespace Toucan.Tests
             var mockServiceContext =  new Mock<IServiceContext>();
             var serviceProvider = new StubServiceProvider();
             serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
-            stubHttpContext.ApplicationServices = serviceProvider;
+            stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
@@ -356,7 +356,7 @@ namespace Toucan.Tests
     {
         IServiceProvider _serviceProvider;
         ClaimsPrincipal _user = null;
-        public override IServiceProvider ApplicationServices
+        public override IServiceProvider RequestServices
         {
             get
             {
@@ -426,20 +426,7 @@ namespace Toucan.Tests
                 throw new NotImplementedException();
             }
         }
-
-        public override IServiceProvider RequestServices
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        
         public override HttpResponse Response
         {
             get
