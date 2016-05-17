@@ -1,8 +1,5 @@
 {  
     "testRunner": "xunit",
-    "commands": {
-        "ef" : "Microsoft.EntityFrameworkCore.Commands"
-    },
     "dependencies": {
         "Microsoft.NETCore.App": {
             "type": "platform",
