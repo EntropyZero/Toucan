@@ -5,7 +5,7 @@ mono:
 env:
   - BUILD_VERSION=${TRAVIS_BUILD_NUMBER}
 install:
-  - brew update2
+  - brew update
   - brew install openssl
   - brew link --force openssl
   - "curl -SL# https://go.microsoft.com/fwlink/?LinkID=798400 > ~/dotnet.pkg"
