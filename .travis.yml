@@ -3,29 +3,29 @@ language: CSharp
 mono:
   - latest
 env:
-  - DNX_BUILD_VERSION=${TRAVIS_BUILD_NUMBER}
+  - BUILD_VERSION=${TRAVIS_BUILD_NUMBER}
 install:
-  - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
-  - dnvm upgrade -r coreclr
-  - dnvm upgrade -r mono
-  - dnu --verbose restore src/Toucan/project.json
-  - dnu --verbose restore test/Toucan.Tests/project.json -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json
+  - brew update2
+  - brew install openssl
+  - brew link --force openssl
+  - "curl -SL# https://go.microsoft.com/fwlink/?LinkID=798400 > ~/dotnet.pkg"
+  - sudo installer -package ~/dotnet.pkg -target /
+  - dotnet --verbose restore src/Toucan/project.json
+  - dotnet --verbose restore test/Toucan.Tests/project.json -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json
 script:
-  - if [ ! -z $TRAVIS_TAG ]; then DNX_BUILD_VERSION=$(echo $TRAVIS_TAG | cut -d '-' -f 2); fi
+  - if [ ! -z $TRAVIS_TAG ]; then BUILD_VERSION=$(echo $TRAVIS_TAG | cut -d '-' -f 2); fi
   - echo TRAVIS_TAG = ${TRAVIS_TAG}
-  - echo DNX_BUILD_VERSION = ${DNX_BUILD_VERSION}
-  - dnvm use 1.0.0-rc1-update2 -r coreclr
-  - dnx --configuration Release -p test/Toucan.Tests test -parallel none
-  - dnvm use 1.0.0-rc1-update2 -r mono
-  - dnu pack src/Toucan --configuration Release --out packages 
+  - echo BUILD_VERSION = ${BUILD_VERSION}
+  - dotnet test test/Toucan.Tests -c Release
+  - dotnet pack src/Toucan -c Release -o packages --version-suffix ${BUILD_VERSION}
 deploy:
   skip_cleanup: true
   provider: releases
   api_key:
     secure: BpMSzYDFj5zq1RiHosYS14jupJ7jHl8y4tfBAj/unz/BKS2ZIHQCZAd5C0YkWblpoH8Gkf4kx/Ih2dN332qriu/KWher4f+9T+mnF5niSInLdlNvU3vsltsHZPEILIUqRvj4AKBjnPxiZ3iyEkCz+2x+ZwWaqjFifBwYyH/92ek41LgBktHWqh9aPiqj7zVNxwv+y7wN8mQUQSD3b5o6pOMN22KfH2lPX1Bh61hzqOOAz6EdZW205+KEFYkXcaO75EHEcVUAT7JOpFQa1PvWNKDBH/wGfnQSu5rIs7KBxAUyPNbjlLQxOO0sxlx+RrqZb4DIsQvBJRRvhyDGvH9hNddVbewOW7M4c2r91gDLRI3mbvKc8aTUJQ2akIayrHIqsWZku80g/Q6Q8v/ZHImkCjDuknLsLhPHUf5DNLrsmbn5ySkuvfYzhm8XigdogRmIs7fHCOguYJkC9iy1RV0nfyGXLk7u9Hdyi93R2bO1byqI4D0/q4bmPlrYniOc+/X/AnLNS2ji5/wvWWH7GPscYXsEULql1mVTqO/CwGXer5x/Bf/cNzrUUI6tMkeQBoBTY21Y7SjikQ9dmBI+T+Zt7ytj8B1ERXPPKz3Dvnbu1e0+pnMl4Mf880D1qUHs6/REKWfci66pDaDSBgo5Y3FwyDJKB+NZRIqVqWr6/zvapr0=
   file: 
-    - packages/Release/Toucan.1.0.0-${DNX_BUILD_VERSION}.nupkg
-    - packages/Release/Toucan.1.0.0-${DNX_BUILD_VERSION}.symbols.nupkg
+    - packages/Release/Toucan.1.0.0-${BUILD_VERSION}.nupkg
+    - packages/Release/Toucan.1.0.0-${BUILD_VERSION}.symbols.nupkg
   on:
     repo: EntropyZero/Toucan
     tags: true
