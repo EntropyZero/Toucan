@@ -1,5 +1,5 @@
 using System;
-using Microsoft.AspNet.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Toucan.Adapters;
 using Toucan.Infrastructure;
@@ -12,7 +12,7 @@ namespace Toucan
         public static IServiceCollection AddToucan<T>(this IServiceCollection services, Action<PermissionStore> setupAction) where T : class, IDbAdapter
         {
             PermissionStore store = new PermissionStore();
-            services.AddInstance<PermissionStore>(store);
+            services.AddSingleton<PermissionStore>(store);
             services.AddSingleton<T, T>();    
             services.AddSingleton<IServiceContext, ServiceContext<T>>();
             services.AddScoped<IAuthorizationHandler, ToucanAuthorizationHandler>();

@@ -1,5 +1,5 @@
 using Xunit;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using Toucan.Adapters;
 

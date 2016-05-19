@@ -1,4 +1,4 @@
-using Microsoft.AspNet.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Toucan.Adapters;
 
 namespace Toucan.Services
