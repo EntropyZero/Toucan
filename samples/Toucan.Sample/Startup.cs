@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -9,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Toucan;
+using Toucan.Adapters;
 using Toucan.Sample.Data;
 using Toucan.Sample.Models;
 using Toucan.Sample.Services;
@@ -46,8 +44,11 @@ namespace Toucan.Sample
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+                
+            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>>(
+                (permissionStore) => permissionStore.AddPermission().ForRole("Member").OnModel("Post").WithAction("Details"));
 
-            services.AddMvc();
+            services.AddMvc(options => options.Filters.Add(new ToucanAuthorizationFilter()));
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

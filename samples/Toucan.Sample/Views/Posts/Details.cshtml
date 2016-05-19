@@ -1,0 +1,9 @@
+@model Toucan.Sample.Models.Post
+@{
+    ViewData["Title"] = "Post Detail";
+}
+
+<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>
+
+<p>@Html.DisplayFor(model => model.Content) </p>
