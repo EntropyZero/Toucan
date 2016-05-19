@@ -65,6 +65,9 @@ namespace Toucan.Sample
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+                
+                Seed.LoadData(app.ApplicationServices);
+                
             }
             else
             {
