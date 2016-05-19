@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Toucan.Adapters;
 
 namespace Toucan.Tests.Adapters
 {
@@ -12,7 +13,7 @@ namespace Toucan.Tests.Adapters
         public DbSet<TestModel> TestModels { get; set; }
     }
     
-    public class TestModel
+    public class TestModel : IDbEntity<int>
     {
         public int Id { get; set; }
         public string Description { get; set; }

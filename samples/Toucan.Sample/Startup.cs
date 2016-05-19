@@ -45,10 +45,10 @@ namespace Toucan.Sample
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
                 
-            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>>(
+            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>, int>(
                 (permissionStore) => permissionStore.AddPermission().ForRole("Member").OnModel("Post").WithAction("Details"));
 
-            services.AddMvc(options => options.Filters.Add(new ToucanAuthorizationFilter()));
+            services.AddMvc(options => options.Filters.Add(new ToucanAuthorizationFilter<int>()));
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

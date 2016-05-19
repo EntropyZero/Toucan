@@ -2,17 +2,22 @@ using System;
 
 namespace Toucan.Adapters
 {
-    public interface IDbAdapter
+    public interface IDbAdapter<TKey>
     {   
-        object GetModel<TArg>(TArg key, Type modelType);
+        object GetModel(TKey key, Type modelType);
         Type KeyType { get; }
     }
+    
+    public interface IDbEntity<TKeyType>
+    {
+         TKeyType Id { get; set; }
+    }
 
-    public abstract class DbAdapter<TStoreType, TKey> : IDbAdapter where TStoreType : class
+    public abstract class DbAdapter<TStoreType, TKey> : IDbAdapter<TKey> where TStoreType : class
     {
         protected TStoreType DataAccess{ get; set; }        
        
-        public abstract object GetModel<TArg>(TArg key, Type modelType);
+        public abstract object GetModel(TKey key, Type modelType);
         
         public Type KeyType 
         {

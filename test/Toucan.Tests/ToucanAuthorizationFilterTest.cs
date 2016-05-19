@@ -32,15 +32,15 @@ namespace Toucan.Tests
        {
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerNoAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;                      
             
             ActionContext test = new ActionContext(stubHttpContext, new RouteData(), new ActionDescriptor());           
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);  
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);  
             
             mockServiceContext.Verify(m => m.DbContext, Times.Never);
             mockServiceContext.Verify(m => m.AuthorizationService, Times.Never);   
@@ -51,15 +51,15 @@ namespace Toucan.Tests
        {
             var stubHttpContext = new StubHttpContext();
             var mockController = new NotToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;                      
             
             ActionContext test = new ActionContext(stubHttpContext, new RouteData(), new ActionDescriptor());           
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext));  
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext));  
             
             mockServiceContext.Verify(m => m.DbContext, Times.Never);
             mockServiceContext.Verify(m => m.AuthorizationService, Times.Never);   
@@ -69,12 +69,12 @@ namespace Toucan.Tests
        public async Task ShouldLoadModelFromDbAdapterIfIdIsPresentInRoute()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
@@ -82,7 +82,7 @@ namespace Toucan.Tests
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
             mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
             mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(new object());
+            mockDbContext.Setup(m => m.GetModel(1, typeof(object))).Returns(new object());
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -92,22 +92,22 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
             task.Start();
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);
            
             mockDbContext.VerifyGet(m => m.KeyType);
-            mockDbContext.Verify(m => m.GetModel<object>(1, typeof(object)));
+            mockDbContext.Verify(m => m.GetModel(1, typeof(object)));
        }
        
        [Fact]
        public async Task ShouldLoadModelFromDbAdapterIfNestedIdIsPresentInRoute()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
@@ -115,7 +115,7 @@ namespace Toucan.Tests
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
             mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
             mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(new object());
+            mockDbContext.Setup(m => m.GetModel(1, typeof(object))).Returns(new object());
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("object_id", "1");
@@ -125,22 +125,22 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
             task.Start();
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);
            
             mockDbContext.VerifyGet(m => m.KeyType);
-            mockDbContext.Verify(m => m.GetModel<object>(1, typeof(object)));
+            mockDbContext.Verify(m => m.GetModel(1, typeof(object)));
        }
        
        [Fact]
        public async Task ShouldGetNewInstanceIfIdIsNotPresentInRoute()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
@@ -155,22 +155,22 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
             task.Start();
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);
            
-            mockDbContext.Verify(m => m.GetModel<object>(1, typeof(object)), Times.Never);
+            mockDbContext.Verify(m => m.GetModel(1, typeof(object)), Times.Never);
        }
        
        [Fact]
        public async Task ShouldCallAuthorizationServiceWithUserActionRequirementAndModel()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var mockUser = new Mock<ClaimsPrincipal>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             stubHttpContext.User = mockUser.Object;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
@@ -186,7 +186,7 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
             task.Start();
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);
            
             mockAuthorizationService.Verify(m => m.AuthorizeAsync(
                 mockUser.Object, 
@@ -198,12 +198,12 @@ namespace Toucan.Tests
        public async Task ShouldSetControllerModelOnSucccessfulAuthorization()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
@@ -212,7 +212,7 @@ namespace Toucan.Tests
             mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
             mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
             object model = new object();
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(model);
+            mockDbContext.Setup(m => m.GetModel(1, typeof(object))).Returns(model);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -222,7 +222,7 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
             task.Start();
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);
            
             Assert.Equal(model, mockController.GetModelInstance<object>());
        }
@@ -231,12 +231,12 @@ namespace Toucan.Tests
        public async Task ShouldNotSetcontrollerModelOnFailedAuthorization()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
@@ -245,7 +245,7 @@ namespace Toucan.Tests
             mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
             mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
             object model = new object();
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(model);
+            mockDbContext.Setup(m => m.GetModel(1, typeof(object))).Returns(model);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -255,7 +255,7 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
             task.Start();
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);
            
             Assert.Equal(null, mockController.GetModelInstance<object>());
        }
@@ -265,12 +265,12 @@ namespace Toucan.Tests
        public async Task ShouldResponseWithChallengeResponseWhenAuthorizationFails()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
@@ -279,7 +279,7 @@ namespace Toucan.Tests
             mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
             mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
             object model = new object();
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(model);
+            mockDbContext.Setup(m => m.GetModel(1, typeof(object))).Returns(model);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -289,7 +289,7 @@ namespace Toucan.Tests
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
             
             task.Start();
-            await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
+            await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext);
             
             Assert.IsType<ChallengeResult>(actionContext.Result);
        }
@@ -298,19 +298,19 @@ namespace Toucan.Tests
        public async Task ShouldThrowExceptionIfLookupModelIsNull()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
-            var mockDbContext = new Mock<IDbAdapter>();
+            var mockDbContext = new Mock<IDbAdapter<int>>();
             var stubHttpContext = new StubHttpContext();
             var mockController = new ToucanControllerWithAttributes();
-            var mockServiceContext =  new Mock<IServiceContext>();
+            var mockServiceContext =  new Mock<IServiceContext<int>>();
             var serviceProvider = new StubServiceProvider();
-            serviceProvider.Services.Add(typeof(IServiceContext), mockServiceContext.Object);
+            serviceProvider.Services.Add(typeof(IServiceContext<int>), mockServiceContext.Object);
             stubHttpContext.RequestServices = serviceProvider;
             mockServiceContext.SetupGet(m => m.DbContext).Returns(mockDbContext.Object);
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
             mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(null);
+            mockDbContext.Setup(m => m.GetModel(1, typeof(object))).Returns(null);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -319,7 +319,7 @@ namespace Toucan.Tests
             ActionContext test = new ActionContext(stubHttpContext, routeData, new ActionDescriptor());
             ActionExecutingContext actionContext = new ActionExecutingContext(test, new List<IFilterMetadata>(), new Dictionary<string, object>(), mockController);
 
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext));
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await new ToucanAuthorizationFilter<int>().OnActionExecutionAsync(actionContext, EmptyNext));
             
             Assert.Equal(null, mockController.GetModelInstance<object>());
             mockAuthorizationService.Verify

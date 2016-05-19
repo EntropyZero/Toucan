@@ -1,8 +1,9 @@
 using System;
+using Toucan.Adapters;
 
 namespace Toucan.Sample.Models
 {
-    public class Post
+    public class Post : IDbEntity<int>
     {
         public int Id { get; set; }
         public string Content { get; set; }
