@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization.Infrastructure;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Filters;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Toucan.Controllers;
 using Toucan.Collections;
@@ -16,7 +16,7 @@ namespace Toucan
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            IServiceContext serviceContext = context.HttpContext.ApplicationServices.GetRequiredService<IServiceContext>();
+            IServiceContext serviceContext = context.HttpContext.RequestServices.GetRequiredService<IServiceContext>();
             TypeInfo t = context.Controller.GetType().GetTypeInfo(); 
             var attributes = t.GetCustomAttributes<LoadAndAuthorizeResourceAttribute>();
             

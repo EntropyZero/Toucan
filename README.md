@@ -23,7 +23,7 @@ Or, you can register the dependency in your project.json file:
 and run
 
 ```bash
-dnu restore
+dotnet restore
 ```
 
 ## Getting Started
@@ -33,6 +33,7 @@ After you have a referenced Toucan in your project, it is as simple as following
 1. Controllers that will make use of Toucan must implement IToucanController. An abstract base ToucanController is also provided if you would prefer. This provides a property collection and generic model getter method for accessing loaded models.
 1. Use the LoadAndAuthorizeAttribute to specify which models to load and authorize by model type and action name.
 1. Add Toucan services and configuration during ServicesConfiguration. Configuration currently is a work in progress and the Fluent API, while functional, is clunky and repetitive.
+    1. See the sample app for adding services. As of now, the toucan filter must be add to MVC seperately from the rest of Toucan configuration. I plan to fix this so that AddToucan call wires up the filter as well.
 
 The basic flow is:
 

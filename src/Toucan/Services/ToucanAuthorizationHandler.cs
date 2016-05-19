@@ -1,5 +1,5 @@
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Toucan.Infrastructure;
 
 namespace Toucan.Services
