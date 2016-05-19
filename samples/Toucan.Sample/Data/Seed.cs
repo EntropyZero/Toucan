@@ -17,6 +17,9 @@ namespace Toucan.Sample.Data
             
             Task userTask = AddUsers(serviceProvider);
             userTask.Wait();
+            
+            Task postTask = AddPosts(serviceProvider);
+            postTask.Wait();
         }
         
         private static async Task AddRoles(IServiceProvider serviceProvider)
@@ -54,6 +57,36 @@ namespace Toucan.Sample.Data
                     }
                 }
             }
+        }
+        
+        private static async Task AddPosts(IServiceProvider serviceProvider)
+        {
+            UserManager<ApplicationUser> userMgr = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            ApplicationDbContext dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            
+            if(dbContext.Posts.Count() == 0)
+            {
+                ApplicationUser user = await userMgr.FindByNameAsync("member@toucan.sample.com");
+                Post post = new Post{
+                    CreatedBy = user,
+                    CreatedAt = DateTime.Now,
+                    Content = "This is a post. Ipsum Lorum etc. Wish I had a better idea for content."
+                };
+                
+                dbContext.Posts.Add(post);
+                
+                Comment comment = new Comment{
+                    CreatedBy = user,
+                    CreatedAt = DateTime.Now,
+                    Content = "This is a comment on a post.",
+                    Post = post
+                };
+                
+                dbContext.Comments.Add(comment);
+                
+                dbContext.SaveChanges();
+            }
+            
         }
     }
 }
