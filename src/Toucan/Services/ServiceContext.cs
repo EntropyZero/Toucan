@@ -3,13 +3,13 @@ using Toucan.Adapters;
 
 namespace Toucan.Services
 {
-    public interface IServiceContext<TKey>
+    public interface IServiceContext
     {
-        IDbAdapter<TKey> DbContext { get; } 
+        IDbAdapter DbContext { get; } 
         IAuthorizationService AuthorizationService { get; }
     }
     
-    public class ServiceContext<TAdapter, TKey> : IServiceContext<TKey>  where TAdapter : IDbAdapter<TKey>
+    public class ServiceContext<TAdapter> : IServiceContext  where TAdapter : IDbAdapter
     {
 
         public ServiceContext(TAdapter dbContext, IAuthorizationService authzService)
@@ -18,7 +18,7 @@ namespace Toucan.Services
             AuthorizationService = authzService;
         }
         
-        public IDbAdapter<TKey> DbContext { get; private set;}
+        public IDbAdapter DbContext { get; private set;}
 
         public IAuthorizationService AuthorizationService { get; private set; }
     }

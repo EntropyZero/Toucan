@@ -12,11 +12,11 @@ using Toucan.Services;
 
 namespace Toucan
 {
-    public class ToucanAuthorizationFilter<TKey> : IAsyncActionFilter
+    public class ToucanAuthorizationFilter : IAsyncActionFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            IServiceContext<TKey> serviceContext = context.HttpContext.RequestServices.GetRequiredService<IServiceContext<TKey>>();
+            IServiceContext serviceContext = context.HttpContext.RequestServices.GetRequiredService<IServiceContext>();
             TypeInfo t = context.Controller.GetType().GetTypeInfo(); 
             var attributes = t.GetCustomAttributes<LoadAndAuthorizeResourceAttribute>();
             
@@ -44,7 +44,7 @@ namespace Toucan
                 var key = context.RouteData.Values.FindModelKey(modelType, serviceContext.DbContext.KeyType);
                 if(key != null)
                 {                          
-                    model = serviceContext.DbContext.GetModel((TKey)key, modelType);
+                    model = serviceContext.DbContext.GetModel(key, modelType);
                 }
                 else
                 {

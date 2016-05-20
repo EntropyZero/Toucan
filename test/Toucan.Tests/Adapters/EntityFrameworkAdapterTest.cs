@@ -27,7 +27,7 @@ namespace Toucan.Tests.Adapters
         [Fact]
         public void ShouldReturnModelFromDatabase()
         { 
-            IDbAdapter<int> adapter = new EntityFrameworkAdapter<TestDbContext, int>(_testDbContext);
+            IDbAdapter adapter = new EntityFrameworkAdapter<TestDbContext, int>(_testDbContext);
             var model = adapter.GetModel(1, typeof(TestModel));
             
             Assert.IsType<TestModel>(model);
@@ -38,7 +38,7 @@ namespace Toucan.Tests.Adapters
         [Fact]
         public void ShouldReturnNullIfModelNotFound()
         {            
-            IDbAdapter<int> adapter = new EntityFrameworkAdapter<TestDbContext, int>(_testDbContext);
+            IDbAdapter adapter = new EntityFrameworkAdapter<TestDbContext, int>(_testDbContext);
             var model = adapter.GetModel(2, typeof(TestModel));
             
             Assert.Null(model); 
