@@ -6,9 +6,10 @@ namespace Toucan.Collections
 {
     public static class ToucanDictionaryExtensions
     {
-        public static object FindModelKey(this IDictionary<string, object> routeData, Type modelType, Type keyType)
+        public static object FindModelKey(this IDictionary<string, object> routeData, Type modelType)
         {
             string candidateKey = string.Format("{0}_id", modelType.Name.ToLowerInvariant());
+            Type keyType = modelType.GetProperty("Id").PropertyType;
             if(routeData.Keys.Contains(candidateKey))
             {
                 return GetKeyValue(routeData[candidateKey], keyType);               

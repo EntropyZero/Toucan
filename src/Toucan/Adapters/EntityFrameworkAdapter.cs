@@ -19,6 +19,13 @@ namespace Toucan.Adapters
             return model;
         }
         
+        public override object GetModel(object key, Type modelType)
+        {
+            IQueryable<IDbEntity> dbSet = GetDBSetProperty(modelType);  
+            var model = dbSet.FirstOrDefault(m => m.Id.Equals(key));            
+            return model;
+        }
+        
         private IQueryable<IDbEntity> GetDBSetProperty(Type modelType)
         {
             var contextType = DataAccess.GetType();

@@ -18,10 +18,15 @@ namespace Toucan.Adapters
         protected TStoreType DataAccess{ get; set; }        
        
         public abstract object GetModel(TKeyType key, Type modelType);
+        
+        public abstract object GetModel(object key, Type modelType);
 
         object IDbAdapter.GetModel(object key, Type modelType)
         {
-            return GetModel((TKeyType)key, modelType);
+            if(key is TKeyType)
+                return GetModel((TKeyType)key, modelType);
+            
+            return GetModel(key, modelType);
         }
 
         public Type KeyType 
