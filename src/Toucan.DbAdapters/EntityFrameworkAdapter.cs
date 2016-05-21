@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Toucan.Core.Data;
 
 namespace Toucan.Adapters
 {

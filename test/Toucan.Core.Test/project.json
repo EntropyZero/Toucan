@@ -5,7 +5,7 @@
             "type": "platform",
             "version": "1.0.0-rc2-*"
         },
-        "Toucan": "1.0.0-*",
+        "Toucan.Core": "1.0.0-*",
         "xunit": "2.1.0-rc2-*",
         "dotnet-test-xunit": "1.0.0-rc2-*",
         "moq.netcore": "4.4.0-*",

@@ -1,6 +1,6 @@
 using System;
 using System.Security.Claims;
-using Toucan.Infrastructure;
+using Toucan.Core.Permissions;
 using Xunit;
 
 namespace Toucan.Tests.Infrastructure 

@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Toucan.Adapters;
+using Toucan.Core.Data;
 
 namespace Toucan.Sample.Models
 {

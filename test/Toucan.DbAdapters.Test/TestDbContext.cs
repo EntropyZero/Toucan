@@ -1,6 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
-using Toucan.Adapters;
+using Toucan.Core.Data;
 
 namespace Toucan.Tests.Adapters
 {

@@ -1,5 +1,5 @@
 using System;
-using Toucan.Adapters;
+using Toucan.Core.Data;
 
 namespace Toucan.Sample.Models
 {

@@ -1,6 +1,7 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Toucan.Core.Data;
 using Toucan.Adapters;
 
 namespace Toucan.Tests.Adapters
