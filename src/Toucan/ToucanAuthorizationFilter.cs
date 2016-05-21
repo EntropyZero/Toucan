@@ -41,7 +41,7 @@ namespace Toucan
                 }
                 Type modelType = attribute.Type;
                 object model;
-                var key = context.RouteData.Values.FindModelKey(modelType, serviceContext.DbContext.KeyType);
+                var key = context.RouteData.Values.FindModelKey(modelType);
                 if(key != null)
                 {                          
                     model = serviceContext.DbContext.GetModel(key, modelType);

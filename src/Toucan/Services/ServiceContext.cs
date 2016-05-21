@@ -9,10 +9,10 @@ namespace Toucan.Services
         IAuthorizationService AuthorizationService { get; }
     }
     
-    public class ServiceContext<T> : IServiceContext  where T : IDbAdapter
+    public class ServiceContext<TAdapter> : IServiceContext  where TAdapter : IDbAdapter
     {
 
-        public ServiceContext(T dbContext, IAuthorizationService authzService)
+        public ServiceContext(TAdapter dbContext, IAuthorizationService authzService)
         {
             DbContext = dbContext;
             AuthorizationService = authzService;

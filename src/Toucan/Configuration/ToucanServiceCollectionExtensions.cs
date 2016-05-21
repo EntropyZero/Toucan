@@ -9,12 +9,12 @@ namespace Toucan
 {
     public static class ToucanServiceCollectionExtensions
     {
-        public static IServiceCollection AddToucan<T>(this IServiceCollection services, Action<PermissionStore> setupAction) where T : class, IDbAdapter
+        public static IServiceCollection AddToucan<TAdapter>(this IServiceCollection services, Action<PermissionStore> setupAction) where TAdapter : class, IDbAdapter
         {
             PermissionStore store = new PermissionStore();
             services.AddSingleton<PermissionStore>(store);
-            services.AddSingleton<T, T>();    
-            services.AddSingleton<IServiceContext, ServiceContext<T>>();
+            services.AddSingleton<TAdapter, TAdapter>();    
+            services.AddSingleton<IServiceContext, ServiceContext<TAdapter>>();
             services.AddScoped<IAuthorizationHandler, ToucanAuthorizationHandler>();
             
             setupAction.Invoke(store);

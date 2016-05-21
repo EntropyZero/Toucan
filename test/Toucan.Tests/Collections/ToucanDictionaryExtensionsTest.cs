@@ -13,7 +13,7 @@ namespace Toucan.Tests.Collections
             routeDataValues.Add("id", 5);
             routeDataValues.Add("testmodel_id", 10); 
             
-            Assert.Equal(10, routeDataValues.FindModelKey(typeof(TestModel), typeof(int)));            
+            Assert.Equal(10, routeDataValues.FindModelKey(typeof(TestModel)));            
         }
         
         [Fact]
@@ -22,7 +22,7 @@ namespace Toucan.Tests.Collections
             var routeDataValues = new Dictionary<string, object>();   
             routeDataValues.Add("id", 5);
             
-            Assert.Equal(5, routeDataValues.FindModelKey(typeof(TestModel), typeof(int)));            
+            Assert.Equal(5, routeDataValues.FindModelKey(typeof(TestModel)));            
         }
               
         [Fact]
@@ -31,9 +31,12 @@ namespace Toucan.Tests.Collections
             var routeDataValues = new Dictionary<string, object>();   
             routeDataValues.Add("action", "Details");
             
-            Assert.Null(routeDataValues.FindModelKey(typeof(TestModel), typeof(int)));            
+            Assert.Null(routeDataValues.FindModelKey(typeof(TestModel)));            
         }
     }
     
-    internal class TestModel{}
+    internal class TestModel
+    {
+        public int Id {get; set;}
+    }
 }
