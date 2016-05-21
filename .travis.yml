@@ -18,10 +18,10 @@ script:
   - echo BUILD_VERSION = ${BUILD_VERSION}
   - /usr/local/share/dotnet/dotnet test test/Toucan.Core.Test -c Release
   - /usr/local/share/dotnet/dotnet test test/Toucan.DbAdapters.Test -c Release
-  - /usr/local/share/dotnet/dotnet test test/Toucan.MVC.Test -c Release
+  - /usr/local/share/dotnet/dotnet test test/Toucan.Test -c Release
   - /usr/local/share/dotnet/dotnet pack src/Toucan.Core -c Release -o packages --version-suffix ${BUILD_VERSION}
   - /usr/local/share/dotnet/dotnet pack src/Toucan.DbAdapters -c Release -o packages --version-suffix ${BUILD_VERSION}
-  - /usr/local/share/dotnet/dotnet pack src/Toucan.MVC -c Release -o packages --version-suffix ${BUILD_VERSION}
+  - /usr/local/share/dotnet/dotnet pack src/Toucan -c Release -o packages --version-suffix ${BUILD_VERSION}
 deploy:
   skip_cleanup: true
   provider: releases
