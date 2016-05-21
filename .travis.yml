@@ -10,14 +10,18 @@ install:
   - brew link --force openssl
   - "curl -SL# https://go.microsoft.com/fwlink/?LinkID=798400 > ~/dotnet.pkg"
   - sudo installer -package ~/dotnet.pkg -target /
-  - /usr/local/share/dotnet/dotnet --verbose restore src/Toucan/project.json
-  - /usr/local/share/dotnet/dotnet --verbose restore test/Toucan.Tests/project.json -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json
+  - /usr/local/share/dotnet/dotnet --verbose restore src/
+  - /usr/local/share/dotnet/dotnet --verbose restore test/ -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json
 script:
   - if [ ! -z $TRAVIS_TAG ]; then BUILD_VERSION=$(echo $TRAVIS_TAG | cut -d '-' -f 2); fi
   - echo TRAVIS_TAG = ${TRAVIS_TAG}
   - echo BUILD_VERSION = ${BUILD_VERSION}
-  - /usr/local/share/dotnet/dotnet test test/Toucan.Tests -c Release
-  - /usr/local/share/dotnet/dotnet pack src/Toucan -c Release -o packages --version-suffix ${BUILD_VERSION}
+  - /usr/local/share/dotnet/dotnet test test/Toucan.Core.Test -c Release
+  - /usr/local/share/dotnet/dotnet test test/Toucan.DbAdapters.Test -c Release
+  - /usr/local/share/dotnet/dotnet test test/Toucan.MVC.Test -c Release
+  - /usr/local/share/dotnet/dotnet pack src/Toucan.Core -c Release -o packages --version-suffix ${BUILD_VERSION}
+  - /usr/local/share/dotnet/dotnet pack src/Toucan.DbAdapters -c Release -o packages --version-suffix ${BUILD_VERSION}
+  - /usr/local/share/dotnet/dotnet pack src/Toucan.MVC -c Release -o packages --version-suffix ${BUILD_VERSION}
 deploy:
   skip_cleanup: true
   provider: releases
