@@ -45,8 +45,10 @@ namespace Toucan.Sample
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
                 
-            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>>(
-                (permissionStore) => permissionStore.AddPermission().ForRole("Member").OnModel("Post").WithAction("Details"));
+            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>>( (permissionStore) => {
+                permissionStore.AddPermission().ForRole("Member").OnModel("Post").WithAction("Details");
+                permissionStore.AddPermission().ForRole("Admin").OnModel("ApplicationUser").WithAction("Details");
+            });
 
             services.AddMvc(options => options.Filters.Add(new ToucanAuthorizationFilter()));
 
