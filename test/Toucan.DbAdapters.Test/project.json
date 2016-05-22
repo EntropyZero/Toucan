@@ -5,7 +5,7 @@
             "type": "platform",
             "version": "1.0.0-rc2-*"
         },
-        "Toucan.DbAdapters": "1.0.0-*",
+        "Toucan.EntityFramework": "1.0.0-*",
         "Toucan.Core": "1.0.0-*",
         "xunit": "2.1.0-rc2-*",
         "dotnet-test-xunit": "1.0.0-rc2-*",
