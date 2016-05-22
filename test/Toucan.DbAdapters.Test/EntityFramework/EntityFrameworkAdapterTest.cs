@@ -2,7 +2,7 @@ using Xunit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Toucan.Core.Data;
-using Toucan.Adapters;
+using Toucan.EntityFramework;
 
 namespace Toucan.Tests.Adapters
 {

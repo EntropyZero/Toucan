@@ -20,7 +20,7 @@ script:
   - /usr/local/share/dotnet/dotnet test test/Toucan.DbAdapters.Test -c Release
   - /usr/local/share/dotnet/dotnet test test/Toucan.Test -c Release
   - /usr/local/share/dotnet/dotnet pack src/Toucan.Core -c Release -o packages --version-suffix ${BUILD_VERSION}
-  - /usr/local/share/dotnet/dotnet pack src/Toucan.DbAdapters -c Release -o packages --version-suffix ${BUILD_VERSION}
+  - /usr/local/share/dotnet/dotnet pack src/Toucan.EntityFramework -c Release -o packages --version-suffix ${BUILD_VERSION}
   - /usr/local/share/dotnet/dotnet pack src/Toucan -c Release -o packages --version-suffix ${BUILD_VERSION}
 deploy:
   skip_cleanup: true
@@ -30,6 +30,10 @@ deploy:
   file: 
     - packages/Toucan.1.0.0-${BUILD_VERSION}.nupkg
     - packages/Toucan.1.0.0-${BUILD_VERSION}.symbols.nupkg
+    - packages/Toucan.Core.1.0.0-${BUILD_VERSION}.nupkg
+    - packages/Toucan.Core.1.0.0-${BUILD_VERSION}.symbols.nupkg
+    - packages/Toucan.EntityFramework.1.0.0-${BUILD_VERSION}.nupkg
+    - packages/Toucan.EntityFramework.1.0.0-${BUILD_VERSION}.symbols.nupkg
   on:
     repo: EntropyZero/Toucan
     tags: true
