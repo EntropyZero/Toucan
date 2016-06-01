@@ -38,8 +38,8 @@
       "version": "1.0.0-preview1-final",
       "type": "build"
     },
-    "Toucan.MVC": "1.0.0-*",
-    "Toucan.DbAdapters": "1.0.0-*"
+    "Toucan": "1.0.0-*",
+    "Toucan.EntityFramework": "1.0.0-*"
   },
 
   "tools": {
