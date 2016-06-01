@@ -2,7 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Toucan.Core.Data;
 
-namespace Toucan.Tests.Adapters
+namespace Toucan.DbAdapters.EntityFramework.Tests
 {
     public class TestDbContext : DbContext
     {
