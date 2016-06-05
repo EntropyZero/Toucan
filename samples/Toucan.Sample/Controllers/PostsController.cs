@@ -1,9 +1,5 @@
-using System;
 using System.Linq;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Toucan.Adapters;
 using Toucan.Controllers;
 using Toucan.Sample.Data;
 using Toucan.Sample.Models;

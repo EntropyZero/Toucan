@@ -1,6 +1,6 @@
 using System;
 
-namespace Toucan.Adapters
+namespace Toucan.Core.Data
 {
     public interface IDbAdapter
     {   

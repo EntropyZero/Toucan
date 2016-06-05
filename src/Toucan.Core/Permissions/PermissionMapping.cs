@@ -1,7 +1,7 @@
 using System;
 using System.Security.Claims;
 
-namespace Toucan.Infrastructure
+namespace Toucan.Core.Permissions
 {
     public class PermissionMapping
     {        

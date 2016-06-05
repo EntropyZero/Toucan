@@ -1,8 +1,8 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using Toucan.Adapters;
-using Toucan.Infrastructure;
+using Toucan.Core.Data;
+using Toucan.Core.Permissions;
 using Toucan.Services;
 
 namespace Toucan

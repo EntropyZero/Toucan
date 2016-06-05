@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
-using Toucan.Adapters;
+using Toucan.Core.Data;
 
 namespace Toucan.Services
 {

@@ -14,10 +14,9 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Moq;
-using Toucan.Adapters;
+using Toucan.Core.Data;
 using Toucan.Controllers;
 using Toucan.Services;
-using Toucan.Tests.Adapters;
 using Xunit;
 
 namespace Toucan.Tests
@@ -502,4 +501,9 @@ namespace Toucan.Tests
     [LoadAndAuthorizeResourceAttribute(typeof(TestModel))]
     public class ToucanControllerWithAttributes : ToucanController
     {}
+    
+    public class TestModel : DbEntity<int>
+    {
+        public override int Id { get; set; }
+    }
 }

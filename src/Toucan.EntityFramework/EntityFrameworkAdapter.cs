@@ -2,8 +2,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Toucan.Core.Data;
 
-namespace Toucan.Adapters
+namespace Toucan.EntityFramework
 {
     public class EntityFrameworkAdapter<TStoreType, TKey> : DbAdapter<TStoreType, TKey> where TStoreType : DbContext
     {
