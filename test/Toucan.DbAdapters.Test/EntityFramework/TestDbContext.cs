@@ -1,7 +1,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Toucan.Core.Data;
 
-namespace Toucan.Tests.Adapters
+namespace Toucan.DbAdapters.EntityFramework.Tests
 {
     public class TestDbContext : DbContext
     {
@@ -12,9 +13,9 @@ namespace Toucan.Tests.Adapters
         public DbSet<TestModel> TestModels { get; set; }
     }
     
-    public class TestModel
+    public class TestModel : DbEntity<int>
     {
-        public int Id { get; set; }
+        public override int Id { get; set; }
         public string Description { get; set; }
         public DateTime Created { get; set; }
     }

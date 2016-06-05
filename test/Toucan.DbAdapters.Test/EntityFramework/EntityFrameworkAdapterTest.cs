@@ -1,9 +1,10 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Toucan.Adapters;
+using Toucan.Core.Data;
+using Toucan.EntityFramework;
 
-namespace Toucan.Tests.Adapters
+namespace Toucan.DbAdapters.EntityFramework.Tests
 {
     public class EntityFrameworkAdapterTest : IDisposable
     {

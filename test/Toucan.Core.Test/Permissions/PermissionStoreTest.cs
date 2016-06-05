@@ -1,8 +1,8 @@
-using Toucan.Infrastructure;
-using Xunit;
-using Moq;
 using System.Security.Claims;
 using System.Collections.Generic;
+using Toucan.Core.Permissions;
+using Xunit;
+using Moq;
 
 namespace Toucan.Tests.Infrastructure
 {

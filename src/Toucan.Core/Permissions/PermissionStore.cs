@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Toucan.Infrastructure
+namespace Toucan.Core.Permissions
 {
     public class PermissionStore
     {
@@ -23,7 +23,6 @@ namespace Toucan.Infrastructure
         public virtual bool HasMatchingPermission(ClaimsPrincipal user, string action, object model)
         {
             var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role);
-            
             foreach(Claim role in roles)
             {
                 IEnumerable<PermissionMapping> candidates = _mappings.Where(m => m.Role == role.Value.ToString() && m.Model == model.GetType().Name && m.Action == action);

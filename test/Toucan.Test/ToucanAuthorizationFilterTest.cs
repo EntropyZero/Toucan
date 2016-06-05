@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Moq;
-using Toucan.Adapters;
+using Toucan.Core.Data;
 using Toucan.Controllers;
 using Toucan.Services;
 using Xunit;
@@ -80,9 +80,8 @@ namespace Toucan.Tests
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
-            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
-            mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(new object());
+            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<TestModel>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
+            mockDbContext.Setup(m => m.GetModel(1, typeof(TestModel))).Returns(new TestModel());
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -93,9 +92,8 @@ namespace Toucan.Tests
             
             task.Start();
             await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
-           
-            mockDbContext.VerifyGet(m => m.KeyType);
-            mockDbContext.Verify(m => m.GetModel<object>(1, typeof(object)));
+
+            mockDbContext.Verify(m => m.GetModel(1, typeof(TestModel)));
        }
        
        [Fact]
@@ -113,12 +111,11 @@ namespace Toucan.Tests
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
-            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
-            mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(new object());
+            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<TestModel>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
+            mockDbContext.Setup(m => m.GetModel(1, typeof(TestModel))).Returns(new object());
             
             RouteData routeData = new RouteData();
-            routeData.Values.Add("object_id", "1");
+            routeData.Values.Add("testmodel_id", "1");
             routeData.Values.Add("action", "test");
             
             ActionContext test = new ActionContext(stubHttpContext, routeData, new ActionDescriptor());
@@ -126,9 +123,8 @@ namespace Toucan.Tests
             
             task.Start();
             await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
-           
-            mockDbContext.VerifyGet(m => m.KeyType);
-            mockDbContext.Verify(m => m.GetModel<object>(1, typeof(object)));
+
+            mockDbContext.Verify(m => m.GetModel(1, typeof(TestModel)));
        }
        
        [Fact]
@@ -146,7 +142,7 @@ namespace Toucan.Tests
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
-            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
+            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<TestModel>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("action", "test");
@@ -157,7 +153,7 @@ namespace Toucan.Tests
             task.Start();
             await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
            
-            mockDbContext.Verify(m => m.GetModel<object>(1, typeof(object)), Times.Never);
+            mockDbContext.Verify(m => m.GetModel(1, typeof(TestModel)), Times.Never);
        }
        
        [Fact]
@@ -177,7 +173,7 @@ namespace Toucan.Tests
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
-            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
+            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<TestModel>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("action", "test");
@@ -190,7 +186,7 @@ namespace Toucan.Tests
            
             mockAuthorizationService.Verify(m => m.AuthorizeAsync(
                 mockUser.Object, 
-                It.IsNotNull<object>(), 
+                It.IsNotNull<TestModel>(), 
                 It.Is<IEnumerable<OperationAuthorizationRequirement>>(r => r.Any(o => o.Name == "test"))));    
        }
        
@@ -209,10 +205,9 @@ namespace Toucan.Tests
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
-            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
-            mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            object model = new object();
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(model);
+            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<TestModel>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
+            TestModel model = new TestModel();
+            mockDbContext.Setup(m => m.GetModel(1, typeof(TestModel))).Returns(model);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -224,7 +219,7 @@ namespace Toucan.Tests
             task.Start();
             await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
            
-            Assert.Equal(model, mockController.GetModelInstance<object>());
+            Assert.Equal(model, mockController.GetModelInstance<TestModel>());
        }
        
        [Fact] 
@@ -242,10 +237,9 @@ namespace Toucan.Tests
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  false));
-            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
-            mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            object model = new object();
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(model);
+            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<TestModel>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
+            TestModel model = new TestModel();
+            mockDbContext.Setup(m => m.GetModel(1, typeof(TestModel))).Returns(model);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -257,12 +251,11 @@ namespace Toucan.Tests
             task.Start();
             await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext);
            
-            Assert.Equal(null, mockController.GetModelInstance<object>());
+            Assert.Equal(null, mockController.GetModelInstance<TestModel>());
        }
-       
               
        [Fact]
-       public async Task ShouldResponseWithChallengeResponseWhenAuthorizationFails()
+       public async Task ShouldRespondWithChallengeResponseWhenAuthorizationFails()
        {
             var mockAuthorizationService = new Mock<IAuthorizationService>();
             var mockDbContext = new Mock<IDbAdapter>();
@@ -276,10 +269,9 @@ namespace Toucan.Tests
             mockServiceContext.SetupGet(m => m.AuthorizationService).Returns(mockAuthorizationService.Object);
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  false));
-            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
-            mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            object model = new object();
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(model);
+            mockAuthorizationService.Setup(m => m.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<TestModel>(), It.IsAny<IEnumerable<IAuthorizationRequirement>>())).Returns(task);
+            TestModel model = new TestModel();
+            mockDbContext.Setup(m => m.GetModel(1, typeof(TestModel))).Returns(model);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -310,7 +302,7 @@ namespace Toucan.Tests
             
             Task<bool> task = new Task<bool>(new Func<bool>(() =>  true));
             mockDbContext.SetupGet(m => m.KeyType).Returns(typeof(int));
-            mockDbContext.Setup(m => m.GetModel<object>(1, typeof(object))).Returns(null);
+            mockDbContext.Setup(m => m.GetModel(1, typeof(TestModel))).Returns(null);
             
             RouteData routeData = new RouteData();
             routeData.Values.Add("id", "1");
@@ -321,11 +313,11 @@ namespace Toucan.Tests
 
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await new ToucanAuthorizationFilter().OnActionExecutionAsync(actionContext, EmptyNext));
             
-            Assert.Equal(null, mockController.GetModelInstance<object>());
+            Assert.Equal(null, mockController.GetModelInstance<TestModel>());
             mockAuthorizationService.Verify
                 (m => m.AuthorizeAsync(
                     It.IsAny<ClaimsPrincipal>(), 
-                    It.IsAny<object>(), 
+                    It.IsAny<TestModel>(), 
                     It.IsAny<IEnumerable<IAuthorizationRequirement>>()), 
                 Times.Never);
        }
@@ -502,11 +494,16 @@ namespace Toucan.Tests
         }
     }
     
-    [LoadAndAuthorizeResourceAttribute(typeof(object))]
+    [LoadAndAuthorizeResourceAttribute(typeof(TestModel))]
     public class NotToucanControllerWithAttributes : Controller
     {}
     
-    [LoadAndAuthorizeResourceAttribute(typeof(object))]
+    [LoadAndAuthorizeResourceAttribute(typeof(TestModel))]
     public class ToucanControllerWithAttributes : ToucanController
     {}
+    
+    public class TestModel : DbEntity<int>
+    {
+        public override int Id { get; set; }
+    }
 }

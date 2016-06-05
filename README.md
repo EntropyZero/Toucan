@@ -26,9 +26,13 @@ and run
 dotnet restore
 ```
 
+You will also need one of the Toucan ORM Adapter packages.
+
+As of now there is only EntityFramework 7, but I have plans to add more once the Toucan base is stable and new features are not as pressing for the main package. The package is Toucan.EntityFramework, and may be obtained in the same manner as the primary Toucan package. Both have a dependency on the Toucan.Core package, which contains the abstractions necessary for buiding and working with ORM adapaters as well as some other base infrastructure.
+
 ## Getting Started
 
-After you have a referenced Toucan in your project, it is as simple as following 3 guidelines:
+After you have referenced Toucan in your project, it is as simple as following 3 guidelines:
 
 1. Controllers that will make use of Toucan must implement IToucanController. An abstract base ToucanController is also provided if you would prefer. This provides a property collection and generic model getter method for accessing loaded models.
 1. Use the LoadAndAuthorizeAttribute to specify which models to load and authorize by model type and action name.
@@ -47,12 +51,14 @@ Toucan now supports nested resource loading and authorization. See the [wiki](ht
 
 ## Roadmap
 
-Right now there are 3 major items that needs to be addressed as I drive the project to its 1.0 release:
+Right now there are 2 major items that needs to be addressed as I drive the project to its 1.0 release:
 
 * A much improved permissions configuration story
   * Improve the Fluent API, or
   * Provide for some form of DSL/file spec for loading permission definitions
 * Improved documentation and samples
+
+There are some smaller features I want to add, such as an Authorize attribute that will authorize access to a model type when the authorization needs are not specific to the model instance, and some other nice to have support in model loading.
 
 ### Contributing
 

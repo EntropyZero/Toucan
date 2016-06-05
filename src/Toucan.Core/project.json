@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0-*",
+  "description": "Toucan Core Abstractions Library",
+  "authors": [ "Phil McMillan" ],
+  "tooling": {
+    "defaultNamespace": "Toucan.Core"
+  },  
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0-rc2-3002702",
+      "type": "platform"
+    },
+    "System.Security.Claims": "4.0.1-rc2-24027"
+  },
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "portable-net45+wp80+win8+wpa81+dnxcore50",
+        "portable-net451+win8"
+      ]
+    }
+  },
+  
+  "packOptions": {
+    "summary": "This is the core library with abstractions for permissions management and ORM data adapters. You only need to download directly if you plan on developing an ORM adapter for Toucan.",
+    "tags": ["MVC", "Authorization", "Rails", "CanCan", "Canard", "Toucan"],
+    "projectUrl": "https://github.com/EntropyZero/Toucan",
+    "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE"
+  }
+}

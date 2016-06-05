@@ -5,8 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Toucan;
-using Toucan.Adapters;
+using Toucan.EntityFramework;
 using Toucan.Sample.Data;
 using Toucan.Sample.Models;
 using Toucan.Sample.Services;
@@ -45,8 +44,10 @@ namespace Toucan.Sample
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
                 
-            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>>(
-                (permissionStore) => permissionStore.AddPermission().ForRole("Member").OnModel("Post").WithAction("Details"));
+            services.AddToucan<EntityFrameworkAdapter<ApplicationDbContext, int>>( (permissionStore) => {
+                permissionStore.AddPermission().ForRole("Member").OnModel("Post").WithAction("Details");
+                permissionStore.AddPermission().ForRole("Admin").OnModel("ApplicationUser").WithAction("Details");
+            });
 
             services.AddMvc(options => options.Filters.Add(new ToucanAuthorizationFilter()));
 

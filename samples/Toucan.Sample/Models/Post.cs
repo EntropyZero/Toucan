@@ -1,10 +1,11 @@
 using System;
+using Toucan.Core.Data;
 
 namespace Toucan.Sample.Models
 {
-    public class Post
+    public class Post : DbEntity<int>
     {
-        public int Id { get; set; }
+        public override int Id { get; set; }
         public string Content { get; set; }
         public virtual ApplicationUser CreatedBy { get; set; }
         public string CreatedById { get; set; }
