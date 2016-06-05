@@ -26,7 +26,7 @@ and run
 dotnet restore
 ```
 
-You will also need one of the Toucan ORM Adapter packages. 
+You will also need one of the Toucan ORM Adapter packages.
 
 As of now there is only EntityFramework 7, but I have plans to add more once the Toucan base is stable and new features are not as pressing for the main package. The package is Toucan.EntityFramework, and may be obtained in the same manner as the primary Toucan package. Both have a dependency on the Toucan.Core package, which contains the abstractions necessary for buiding and working with ORM adapaters as well as some other base infrastructure.
 
