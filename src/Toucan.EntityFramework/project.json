@@ -23,6 +23,7 @@
   },
   
   "packOptions": {
+    "summary": "Libary package with the EntryFramework.Core adapter for Toucan.",
     "tags": ["MVC", "Authorization", "Rails", "CanCan", "Canard", "Toucan"],
     "projectUrl": "https://github.com/EntropyZero/Toucan",
     "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE"

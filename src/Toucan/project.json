@@ -25,8 +25,10 @@
   },
   
   "packOptions": {
+    "summar": "Toucan MVC Resource Authorization Library",
     "tags": ["MVC", "Authorization", "Rails", "CanCan", "Canard", ""],
     "projectUrl": "https://github.com/EntropyZero/Toucan",
-    "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE"
+    "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE",
+    "releaseNotes": "The direct dependency for EntityFramework was removed by restructuring Toucan to have a core package of abstractions and a separate ORM adapter structure. See the Getting Started section on the project page for more details."
   }
 }

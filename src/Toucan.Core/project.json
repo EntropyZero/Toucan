@@ -22,6 +22,7 @@
   },
   
   "packOptions": {
+    "summary": "This is the core library with abstractions for permissions management and ORM data adapters. You only need to download directly if you plan on developing an ORM adapter for Toucan.",
     "tags": ["MVC", "Authorization", "Rails", "CanCan", "Canard", "Toucan"],
     "projectUrl": "https://github.com/EntropyZero/Toucan",
     "licenseUrl": "https://raw.githubusercontent.com/EntropyZero/Toucan/master/LICENSE"
