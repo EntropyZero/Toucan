@@ -3,15 +3,15 @@
     "dependencies": {
         "Microsoft.NETCore.App": {
             "type": "platform",
-            "version": "1.0.0-rc2-*"
+            "version": "1.0.0"
         },
         "Toucan.Core": "1.0.0-*",
-        "xunit": "2.1.0-rc2-*",
-        "dotnet-test-xunit": "1.0.0-rc2-*",
+        "xunit": "2.2.0-beta2-build3300",
+        "dotnet-test-xunit": "2.2.0-preview2-build1029",
         "moq.netcore": "4.4.0-*",
-        "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
-        "Microsoft.EntityFrameworkCore": "1.0.0-rc2-final",
-        "Microsoft.EntityFrameworkCore.InMemory": "1.0.0-rc2-final"
+        "Microsoft.AspNetCore.Mvc": "1.0.0",
+        "Microsoft.EntityFrameworkCore": "1.0.0",
+        "Microsoft.EntityFrameworkCore.InMemory": "1.0.0"
     },
     "frameworks": {
         "netcoreapp1.0": {
@@ -20,7 +20,7 @@
                 "dotnet54"
                 ],
             "dependencies": {
-                "System.Diagnostics.TraceSource": "4.0.0-*"
+                "System.Diagnostics.TraceSource": "4.0.0"
             }
           }
     }

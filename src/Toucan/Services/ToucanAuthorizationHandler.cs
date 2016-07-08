@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Toucan.Core.Permissions;
@@ -13,9 +14,8 @@ namespace Toucan.Services
                 _permissionStore = permissionStore;    
             }
             
-            protected override void Handle(AuthorizationContext context, OperationAuthorizationRequirement requirement, object resource)
+            protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, object resource)
             {
-                 
                 if(_permissionStore.HasMatchingPermission(context.User, requirement.Name, resource))
                 {
                     context.Succeed(requirement);
@@ -24,6 +24,7 @@ namespace Toucan.Services
                 {
                     context.Fail();
                 }
+                return Task.FromResult(0);
             }
         }
     }
