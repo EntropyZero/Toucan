@@ -8,7 +8,7 @@ install:
   - brew update
   - brew install openssl
   - brew link --force openssl
-  - "curl -SL# https://go.microsoft.com/fwlink/?LinkID=798400 > ~/dotnet.pkg"
+  - "curl -SL# https://go.microsoft.com/fwlink/?LinkID=809124 > ~/dotnet.pkg"
   - sudo installer -package ~/dotnet.pkg -target /
   - /usr/local/share/dotnet/dotnet --verbose restore src/
   - /usr/local/share/dotnet/dotnet --verbose restore test/ -f https://www.myget.org/F/aspnet-contrib/api/v3/index.json

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Moq;
@@ -16,12 +17,12 @@ namespace Toucan.Tests.Services
             ClaimsPrincipal user = new ClaimsPrincipal();
             var requirement = new OperationAuthorizationRequirement{ Name = "Test"};
             object model = new object();
-            AuthorizationContext context = new AuthorizationContext(new []{requirement}, user, model);   
+            AuthorizationHandlerContext context = new AuthorizationHandlerContext(new []{requirement}, user, model);   
             var mockStore = new Mock<PermissionStore>();
             
             ToucanAuthorizationHandler handler = new ToucanAuthorizationHandler(mockStore.Object);
-            handler.Handle(context);
-            
+            Task task = handler.HandleAsync(context);
+            task.Wait();
             mockStore.Verify(m => m.HasMatchingPermission(user, "Test", model));
         }
         
@@ -31,12 +32,13 @@ namespace Toucan.Tests.Services
             ClaimsPrincipal user = new ClaimsPrincipal();
             var requirement = new OperationAuthorizationRequirement{ Name = "Test"};
             object model = new object();
-            AuthorizationContext context = new AuthorizationContext(new []{requirement}, user, model);
+            AuthorizationHandlerContext context = new AuthorizationHandlerContext(new []{requirement}, user, model);
             var mockStore = new Mock<PermissionStore>();
             mockStore.Setup(m => m.HasMatchingPermission(user, "Test", model)).Returns(true);
             
             ToucanAuthorizationHandler handler = new ToucanAuthorizationHandler(mockStore.Object);
-            handler.Handle(context);
+            Task task = handler.HandleAsync(context);
+            task.Wait();
             Assert.True(context.HasSucceeded);
         }
                 
@@ -46,12 +48,13 @@ namespace Toucan.Tests.Services
             ClaimsPrincipal user = new ClaimsPrincipal();
             var requirement = new OperationAuthorizationRequirement{ Name = "Test"};
             object model = new object();
-            AuthorizationContext context = new AuthorizationContext(new []{requirement}, user, model);
+            AuthorizationHandlerContext context = new AuthorizationHandlerContext(new []{requirement}, user, model);
             var mockStore = new Mock<PermissionStore>();
             mockStore.Setup(m => m.HasMatchingPermission(user, "Test", model)).Returns(false);
             
             ToucanAuthorizationHandler handler = new ToucanAuthorizationHandler(mockStore.Object);
-            handler.Handle(context);
+            Task task = handler.HandleAsync(context);
+            task.Wait();
             Assert.True(context.HasFailed);
         }
     }
