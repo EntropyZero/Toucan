@@ -63,3 +63,5 @@ There are some smaller features I want to add, such as an Authorize attribute th
 ### Contributing
 
 I'm happy to have help :-). If you want to contribute code, fork the repo, make your branch and send me a pull request. If you have feature ideas, or bugs,open an issue and I'll take it up from there.
+
+Trivial change to demonstrate workflow. The typo is fixed.
